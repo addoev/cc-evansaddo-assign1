@@ -60,7 +60,7 @@ chmod 644 "${PROJECT_DIR}/data/file3_renamed.txt"
 
 # Change the ownership of 'file4.txt' in the 'logs' directory to another user and group (nobody:nogroup).
 echo "Changing ownership of 'file4.txt'..."
-chown nobody:nogroup "${PROJECT_DIR}/logs/file4.txt" 
+sudo chown nobody:nogroup "${PROJECT_DIR}/logs/file4.txt" 
 
 # 5. Symbolic Links
 # Create a symbolic link in the 'scripts' directory pointing to 'backup/file1.txt' in the 'backup' directory.
@@ -75,24 +75,28 @@ readlink "${PROJECT_DIR}/scripts/file1_link.txt"
 # 6. System Monitoring and Process Management
 # Display the disk usage of the entire filesystem.
 echo "Displaying disk usage of the filesystem..."
-# TODO: show filesystem disk usage
+df -h
 
 # List all running processes and specifically identify the process IDs related to Bash.
 echo "Listing all running processes and finding PID of 'bash'..."
-# TODO: list processes and filter for bash
+ps aux | grep '[b]ash'
 
 # 7. Automated Backup
 # Create a compressed archive of the 'backup' directory and store it within the same directory.
 # Use the current date to name the archive file.
 echo "Creating a compressed archive of the 'backup' directory..."
-# TODO: create a dated archive of "${PROJECT_DIR}/backup" inside "${PROJECT_DIR}/backup"
+tar -czf "/tmp/backup_$(date +%Y%m%d).tar.gz" -C "${PROJECT_DIR}" backup
+mv "/tmp/backup_$(date +%Y%m%d).tar.gz" "${PROJECT_DIR}/backup/"
 
 # 8. Log Completion
 # Create a log message indicating the completion of the assignment tasks and store it in a 'README.md' file inside the 'project' directory.
 echo "Logging completion message..."
-# TODO: write a one-line completion message to "${PROJECT_DIR}/README.md"
+echo "Assignment completed successfully on $(date)" > "${PROJECT_DIR}/README.md"
 
 # 9. Directory Existence Verification
 # Add a verification step at the end of the script to check if the 'data' directory exists. If it doesn’t, the script should log an error message and exit.
 echo "Verifying final directory state..."
-# TODO: confirm that "${PROJECT_DIR}/data" exists; if not, print an error and exit
+if [ ! -d "${PROJECT_DIR}/data" ]; then
+    echo "Error: Directory '${PROJECT_DIR}/data' does not exist." >&2
+    exit 1
+fi
